@@ -7,13 +7,21 @@ name = "recipe-intelligence-assistant"
 version = "0.1.0"
 description = "Evidence-grounded recipe search and intelligence"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "fastapi>=0.110,<1",
+    "google-genai>=1.0,<2",
+    "pydantic>=2,<3",
+    "uvicorn>=0.27,<1",
+]
 
 [project.optional-dependencies]
-test = ["pytest>=8"]
+test = ["httpx>=0.27", "pytest>=8"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+recipe_intelligence = ["static/*.html", "static/*.css", "static/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

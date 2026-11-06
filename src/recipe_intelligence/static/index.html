@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f4ef">
+    <meta name="description" content="Search recipes and explore evidence from your local recipe collection.">
+    <title>Recipe Intelligence Assistant</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Conversations">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">R</div>
+          <div>
+            <p class="brand-name">Recipe intelligence</p>
+            <p class="brand-caption">A grounded kitchen companion</p>
+          </div>
+        </div>
+
+        <button class="new-chat-button" id="new-session" type="button">
+          <span aria-hidden="true">＋</span> New conversation
+        </button>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">
+            <span>Recent conversations</span>
+            <span class="local-label">This browser</span>
+          </div>
+          <nav class="session-list" id="session-list" aria-label="Recent conversations"></nav>
+          <p class="sidebar-empty" id="session-empty">Your conversations will appear here.</p>
+        </div>
+
+        <div class="sidebar-footer">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="connection-label">Connecting to your recipe database…</span>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Open conversations" aria-expanded="false">☰</button>
+          <div class="topbar-title">
+            <span class="eyebrow">EIGHT PORTIONS RECIPE BOX</span>
+            <h1 id="conversation-title">Your kitchen, researched</h1>
+          </div>
+          <div class="topbar-actions">
+            <span class="local-chip"><span class="status-dot"></span> Local recipe data</span>
+            <button class="icon-button delete-session" id="delete-session" type="button" aria-label="Delete current conversation" title="Delete conversation">⌫</button>
+          </div>
+        </header>
+
+        <div class="workspace">
+          <section class="conversation-panel" aria-label="Conversation">
+            <div class="welcome" id="welcome">
+              <div class="welcome-icon" aria-hidden="true">✳</div>
+              <p class="eyebrow">RECIPE INTELLIGENCE, NOT GUESSWORK</p>
+              <h2>What would you like<br>to make today?</h2>
+              <p class="welcome-copy">Search the collection, match what’s in your kitchen, or inspect evidence for an ingredient change.</p>
+              <div class="prompt-grid">
+                <button class="prompt-card" type="button" data-prompt="Find a recipe for tomato rice">
+                  <span class="prompt-icon" aria-hidden="true">⌕</span>
+                  <span><strong>Find a recipe</strong><small>Search titles and ingredients</small></span>
+                  <span class="prompt-arrow" aria-hidden="true">↗</span>
+                </button>
+                <button class="prompt-card" type="button" data-prompt="I have eggs, onions, tomatoes and rice">
+                  <span class="prompt-icon" aria-hidden="true">◈</span>
+                  <span><strong>Use what I have</strong><small>Rank recipes by ingredients</small></span>
+                  <span class="prompt-arrow" aria-hidden="true">↗</span>
+                </button>
+                <button class="prompt-card" type="button" data-prompt="How many recipes are in the dataset?">
+                  <span class="prompt-icon" aria-hidden="true">∑</span>
+                  <span><strong>Ask the collection</strong><small>Get a computed statistic</small></span>
+                  <span class="prompt-arrow" aria-hidden="true">↗</span>
+                </button>
+                <button class="prompt-card" type="button" data-prompt="Select a recipe, then ask: Replace an ingredient in that recipe">
+                  <span class="prompt-icon" aria-hidden="true">⤷</span>
+                  <span><strong>Explore a substitution</strong><small>Start from a recipe result</small></span>
+                  <span class="prompt-arrow" aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="message-list" id="message-list" aria-live="polite" aria-relevant="additions text"></div>
+            <div class="processing-indicator" id="processing" role="status" hidden>
+              <span class="typing-dots"><i></i><i></i><i></i></span>
+              <span>Checking the local recipe records</span>
+            </div>
+
+            <form class="composer" id="message-form">
+              <label class="sr-only" for="message-input">Message your recipe assistant</label>
+              <textarea id="message-input" name="message" rows="1" maxlength="2000" placeholder="Ask about recipes, ingredients, or a follow-up…" required></textarea>
+              <div class="composer-bottom">
+                <span class="composer-hint">The assistant checks the recipe collection before answering.</span>
+                <div class="composer-actions">
+                  <span class="character-count" id="character-count">0 / 2000</span>
+                  <button class="send-button" id="send-button" type="submit" aria-label="Send message">
+                    <span>Send</span><span aria-hidden="true">↑</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <p class="mobile-disclaimer">Recipe data is evidence, not medical or allergy advice.</p>
+          </section>
+
+          <aside class="tools-panel" aria-label="Deterministic recipe tools">
+            <div class="tools-header">
+              <div>
+                <p class="eyebrow">DETERMINISTIC TOOLS</p>
+                <h2>Explore the data</h2>
+              </div>
+              <span class="tool-badge">Local</span>
+            </div>
+            <p class="tools-intro">Run a focused search or calculation directly against the dataset.</p>
+
+            <details class="tool-section" open>
+              <summary><span class="tool-number">01</span><span>Recipe search</span><span class="summary-chevron">⌄</span></summary>
+              <form class="tool-form" id="search-tool">
+                <label for="search-query">Dish or ingredient</label>
+                <input id="search-query" name="query" type="text" maxlength="300" placeholder="e.g. lentil soup" required>
+                <div class="two-fields">
+                  <div>
+                    <label for="search-field">Search in</label>
+                    <select id="search-field" name="field">
+                      <option value="all">All fields</option>
+                      <option value="title">Title</option>
+                      <option value="ingredients">Ingredients</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="search-limit">Results</label>
+                    <select id="search-limit" name="limit">
+                      <option value="5">5</option><option value="10">10</option><option value="20">20</option>
+                    </select>
+                  </div>
+                </div>
+                <label for="search-exclusions">Exclude ingredients <span class="optional">(optional)</span></label>
+                <input id="search-exclusions" name="exclude" type="text" maxlength="300" placeholder="e.g. peanut, shellfish">
+                <button class="tool-submit" type="submit">Search recipes <span aria-hidden="true">→</span></button>
+              </form>
+            </details>
+
+            <details class="tool-section">
+              <summary><span class="tool-number">02</span><span>Ingredient matching</span><span class="summary-chevron">⌄</span></summary>
+              <form class="tool-form" id="matching-tool">
+                <label for="available-ingredients">Ingredients you have</label>
+                <textarea id="available-ingredients" name="available" rows="2" placeholder="garlic, tomato, rice" required></textarea>
+                <label for="matching-exclusions">Hard exclusions <span class="optional">(optional)</span></label>
+                <input id="matching-exclusions" name="exclude" type="text" placeholder="e.g. peanut">
+                <label for="matching-steps">Maximum instruction steps <span class="optional">(optional)</span></label>
+                <input id="matching-steps" name="steps" type="number" min="1" max="100" placeholder="No limit">
+                <fieldset class="preference-fieldset">
+                  <legend>Rank toward</legend>
+                  <label class="check-label"><input type="checkbox" name="preference" value="fewer_missing"> Fewer missing ingredients</label>
+                  <label class="check-label"><input type="checkbox" name="preference" value="fewer_additional"> Fewer additional ingredients</label>
+                  <label class="check-label"><input type="checkbox" name="preference" value="fewer_steps"> Fewer instruction steps</label>
+                </fieldset>
+                <button class="tool-submit" type="submit">Match ingredients <span aria-hidden="true">→</span></button>
+              </form>
+            </details>
+
+            <details class="tool-section">
+              <summary><span class="tool-number">03</span><span>Substitution evidence</span><span class="summary-chevron">⌄</span></summary>
+              <form class="tool-form" id="substitution-tool">
+                <label for="sub-recipe-id">Recipe ID</label>
+                <input id="sub-recipe-id" name="recipe_id" type="text" maxlength="300" placeholder="Use an ID from a recipe result" required>
+                <label for="sub-source">Dataset source</label>
+                <select id="sub-source" name="source">
+                  <option value="">Resolve if unique</option>
+                  <option value="ar">AR</option><option value="epi">Epi</option><option value="fn">FN</option>
+                </select>
+                <label for="sub-ingredient">Ingredient to replace</label>
+                <input id="sub-ingredient" name="ingredient" type="text" maxlength="300" placeholder="e.g. butter" required>
+                <label for="sub-replacements">Replacement to evaluate <span class="optional">(optional)</span></label>
+                <input id="sub-replacements" name="replacement" type="text" maxlength="300" placeholder="e.g. olive oil">
+                <label for="sub-restrictions">Restrictions <span class="optional">(optional)</span></label>
+                <input id="sub-restrictions" name="restrictions" type="text" placeholder="e.g. dairy-free, peanut-free">
+                <button class="tool-submit" type="submit">Check local evidence <span aria-hidden="true">→</span></button>
+              </form>
+            </details>
+
+            <details class="tool-section">
+              <summary><span class="tool-number">04</span><span>Dataset analytics</span><span class="summary-chevron">⌄</span></summary>
+              <form class="tool-form" id="analytics-tool">
+                <label for="statistic">Calculation</label>
+                <select id="statistic" name="statistic">
+                  <option value="recipe_count">Recipe count</option>
+                  <option value="average_ingredient_lines">Average ingredient lines</option>
+                  <option value="ingredient_prevalence">Ingredient prevalence</option>
+                </select>
+                <label for="stat-ingredient">Ingredient <span class="optional">(for prevalence)</span></label>
+                <input id="stat-ingredient" name="ingredient" type="text" placeholder="e.g. garlic">
+                <label for="stat-exclusions">Exclude ingredients <span class="optional">(optional)</span></label>
+                <input id="stat-exclusions" name="exclude" type="text" placeholder="e.g. peanut">
+                <button class="tool-submit" type="submit">Calculate from dataset <span aria-hidden="true">→</span></button>
+              </form>
+            </details>
+
+            <div class="tools-note">
+              <span class="note-mark" aria-hidden="true">i</span>
+              <p>These one-shot tools don’t change your conversation context. Use the chat for follow-ups and saved session state.</p>
+            </div>
+          </aside>
+        </div>
+      </main>
+      <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>

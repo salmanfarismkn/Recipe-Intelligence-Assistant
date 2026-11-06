@@ -24,11 +24,23 @@ INGREDIENT_ALIASES = {
     "lemons": "lemon",
     "limes": "lime",
     "onions": "onion",
+    "peanuts": "peanut",
     "potatoes": "potato",
     "scallions": "green onion",
     "spring onions": "green onion",
     "tomatoes": "tomato",
     "zucchinis": "zucchini",
+}
+_RANKING_PREFERENCE_ALIASES = {
+    "fewer additional": "fewer_additional",
+    "fewer additional ingredients": "fewer_additional",
+    "fewer missing": "fewer_missing",
+    "fewer missing ingredients": "fewer_missing",
+    "fewer steps": "fewer_steps",
+    "fewer instruction steps": "fewer_steps",
+    "fewer_missing": "fewer_missing",
+    "fewer_additional": "fewer_additional",
+    "fewer_steps": "fewer_steps",
 }
 
 _NUMERIC_AMOUNT = re.compile(
@@ -99,6 +111,8 @@ _UNIT_ALIASES = {
     "pinches": "pinch",
     "dashes": "dash",
     "sticks": "stick",
+    "blocks": "block",
+    "block": "block",
 }
 _UNIT_ALIASES.update({unit: unit for unit in set(_UNIT_ALIASES.values())})
 _UNIT_PHRASES = sorted(
@@ -190,6 +204,23 @@ class IngredientMatchReport:
     quantity_sufficiency_verified: bool
     quantity_note: str
     ranking_method: str
+    ranking_preferences: tuple[str, ...]
+
+
+def normalize_ranking_preferences(values: Sequence[str]) -> tuple[str, ...]:
+    if isinstance(values, str):
+        raise TypeError("ranking preferences must be a sequence of preference names")
+    normalized_values: list[str] = []
+    for value in values:
+        if not isinstance(value, str):
+            raise TypeError("ranking preferences must contain strings")
+        key = normalize_ingredient(value)
+        preference = _RANKING_PREFERENCE_ALIASES.get(key)
+        if preference is None:
+            raise ValueError(f"unsupported ranking preference: {value}")
+        if preference not in normalized_values:
+            normalized_values.append(preference)
+    return tuple(normalized_values)
 
 
 def _quantity_value(value: str) -> Fraction:
@@ -434,6 +465,7 @@ def match_recipes(
     *,
     excluded_ingredients: Sequence[str] = (),
     max_instruction_steps: int | None = None,
+    ranking_preferences: Sequence[str] = (),
     limit: int = 20,
 ) -> IngredientMatchReport:
     """Rank recipes by matched ingredient-line coverage without relaxing constraints."""
@@ -447,6 +479,7 @@ def match_recipes(
         raise ValueError("maximum instruction steps must be a positive integer")
     if isinstance(available_ingredients, str) or isinstance(excluded_ingredients, str):
         raise TypeError("ingredient inputs must be sequences of ingredient strings")
+    preferences = normalize_ranking_preferences(ranking_preferences)
 
     available = _unique_parsed_ingredients(
         available_ingredients, "available"
@@ -565,8 +598,21 @@ def match_recipes(
             )
     finish_recipe()
 
-    results.sort(
-        key=lambda result: (
+    def ranking_key(result: MatchedRecipe) -> tuple[object, ...]:
+        preference_key: list[object] = []
+        for preference in preferences:
+            if preference == "fewer_missing":
+                preference_key.append(len(result.missing_ingredients))
+            elif preference == "fewer_additional":
+                preference_key.append(len(result.additional_ingredients))
+            else:
+                preference_key.append(
+                    result.instruction_step_count
+                    if result.instruction_step_count is not None
+                    else float("inf")
+                )
+        return (
+            *preference_key,
             -result.score,
             -len(result.matched_ingredients),
             len(result.missing_ingredients),
@@ -579,6 +625,13 @@ def match_recipes(
             result.source,
             result.recipe_id,
         )
+    results.sort(key=ranking_key)
+    preference_description = (
+        "Apply preferences in the supplied order ("
+        + ", ".join(preferences)
+        + "), then sort by "
+        if preferences
+        else "Sort by "
     )
     return IngredientMatchReport(
         results=tuple(results[:limit]),
@@ -597,8 +650,10 @@ def match_recipes(
             "compared; having an ingredient does not verify sufficient quantity."
         ),
         ranking_method=(
-            "Sort by matched ingredient-line coverage (matched lines / required "
+            preference_description
+            + "matched ingredient-line coverage (matched lines / required "
             "lines), then matched line count, fewer missing lines, fewer additional "
             "available ingredients, fewer instruction steps, source, and recipe ID."
         ),
+        ranking_preferences=preferences,
     )

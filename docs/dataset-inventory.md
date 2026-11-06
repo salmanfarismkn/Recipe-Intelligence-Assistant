@@ -20,6 +20,11 @@ The archive contains three JSON objects. Each top-level key is a stable recipe I
 
 Across this snapshot, no duplicate JSON object keys or cross-file recipe-ID collisions were found. There are 125,164 distinct IDs. Ingestion must still check for both duplicate keys and cross-source ID collisions; keys must not be silently overwritten. A collision across source files is retained as separate records identified by `(source, recipe_id)` and reported. The inventory includes expected and actual per-source/total record counts, so snapshot drift is visible.
 
+The ingested snapshot contains 1,594 excess records whose complete raw JSON
+content is identical to another record under a different ID. These are not ID
+collisions; they remain separate source records. The SQLite audit found 400,846
+AR, 246,780 Epi, and 669,324 FN ingredient rows (1,316,950 total).
+
 ## Observed schema and data quality
 
 The four expected fields are `title`, `ingredients`, `instructions`, and `picture_link`. Present ingredient values are lists of strings in the inspected snapshot. Titles and instructions are usually text, but can be null or blank. Picture links can be null. The inspection records missing and null values separately.
@@ -33,6 +38,14 @@ The four expected fields are `title`, `ingredients`, `instructions`, and `pictur
 The 517 empty records are present in the source files and are part of the reported record totals. They must be preserved and flagged, not filtered out. The original source strings, including whitespace and nulls, must remain distinct from any normalized or interpreted values.
 
 The SQLite store uses `(source, recipe_id)` as its primary key. It keeps the original record JSON and each ingredient value in order, while a separate ingredient table stores normalized text and conservative parsed fields (canonical ingredient identity, quantity status, recognized unit, and parser warnings). Recipe rows also store the instruction-step count and the method used to derive it. These derived fields never replace or alter source content. Import is transactional and replaces the previous snapshot only after the new archive has been inspected; repeating an import does not duplicate records. The FTS5 index supports title-only, ingredient-only, and combined keyword retrieval. Queries require all normalized terms and rank deterministically with BM25. This is keyword full-text retrieval, not semantic search.
+
+On the pinned full-dataset database, all stored title/instruction/picture fields
+matched the corresponding raw JSON fields; all ingredient strings matched
+their stored JSON values; and recomputing normalized ingredient text yielded
+zero mismatches. There were 124,473 records with non-null instructions and
+714 with missing or blank instructions. Exact per-source values and the
+reproducible checks are recorded in
+[`reports/evaluation_report.json`](../reports/evaluation_report.json).
 
 `RecipeFilters` are applied before search limits and are shared with statistics. Ingredient include/exclude filters use exact contiguous normalized text, without aliases or stemming. Exclusion filtering also omits recipes whose ingredient list is missing or malformed, rather than treating unknown ingredients as safe. This text matching is not a medical or allergy-safety guarantee.
 

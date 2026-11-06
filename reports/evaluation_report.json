@@ -1,0 +1,219 @@
+{
+  "all_integrity_checks_passed": true,
+  "database_path": "recipe-intelligence-stage9-audit.sqlite3",
+  "database_size_bytes": 1261944832,
+  "evaluation_version": 1,
+  "release_verification": {
+    "browser_automation": {
+      "status": "not_performed",
+      "note": "Fresh-process HTTP/static-asset checks passed; no browser automation was run."
+    },
+    "clean_install_on_separate_machine": {
+      "status": "not_verified"
+    },
+    "docker": {
+      "status": "not_available",
+      "note": "The repository has no Dockerfile or Compose configuration."
+    },
+    "full_dataset_api": {
+      "search": {
+        "http_status": 200,
+        "result_count": 5
+      },
+      "analytics_garlic_prevalence": {
+        "http_status": 200,
+        "numerator": 37344,
+        "denominator": 124647
+      },
+      "matching": {
+        "http_status": 200,
+        "candidate_recipes_analyzed": 72542,
+        "result_count": 5,
+        "quantity_sufficiency_verified": false
+      },
+      "substitution": {
+        "http_status": 200,
+        "status": "unsupported",
+        "option_count": 10
+      }
+    },
+    "full_dataset_conversation": {
+      "turn_count": 5,
+      "statuses": [
+        "complete",
+        "complete",
+        "complete",
+        "complete",
+        "complete"
+      ],
+      "hard_exclusions_after_followups": [
+        "peanuts",
+        "eggs"
+      ],
+      "maximum_instruction_steps": 6,
+      "ranking_preferences": [
+        "fewer_additional"
+      ],
+      "selected_recipe_reference": "fn:88JVPaInKt8p04BeYdzZjhGT6WTDPdW",
+      "original_instructions_verified_against_database": true,
+      "state_persistence_verified": true
+    },
+    "fresh_server": {
+      "status": "passed",
+      "ready_milliseconds": 1133,
+      "health_status": "ok",
+      "root_http_status": 200,
+      "javascript_asset_http_status": 200,
+      "search_http_status": 200
+    },
+    "gemini_live_smoke": {
+      "status": "not_performed",
+      "reason": "Gemini was disabled and credentials/model were not configured."
+    },
+    "grounding_evaluation": {
+      "status": "passed",
+      "archive_matches_pinned_snapshot": true,
+      "total_record_count": 125164,
+      "checks": {
+        "interpretation_entity_validation": true,
+        "search_references_preserved": true,
+        "fabricated_reference_rejected": true,
+        "hard_exclusion_preserved": true
+      },
+      "matching_candidates_analyzed": 37344
+    },
+    "scoped_security_review": {
+      "status": "manual_review_only",
+      "controls_observed": [
+        "Pydantic schema limits and a 64 KiB request-body cap",
+        "Parameterized SQL filters and recipe identifiers",
+        "Dataset/model strings rendered by the browser as text",
+        "No Gemini credential in frontend assets or API error payloads",
+        "No cross-origin middleware enabled"
+      ],
+      "deployment_limitations": [
+        "No authentication is provided; this is a local single-user application.",
+        "No penetration test or hostile-network exposure test was performed."
+      ]
+    },
+    "test_suite": {
+      "command": "python -m pytest -q",
+      "passed": 72,
+      "failed": 0,
+      "warnings": [
+        "Starlette/httpx TestClient deprecation warning",
+        "AnyIO BlockingPortal deprecation warning"
+      ]
+    }
+  },
+  "submission_readiness": {
+    "classification": "conditionally_ready_for_local_deterministic_review",
+    "basis": "Pinned dataset integrity, deterministic tests, full-dataset APIs, and a multi-turn hard-constraint conversation passed.",
+    "unverified_or_unavailable": [
+      "Live Gemini connectivity and configured model access",
+      "Browser automation/visual inspection",
+      "Clean install on a separate machine",
+      "Docker/container deployment",
+      "Production multi-worker concurrency",
+      "Penetration testing and network-exposure validation"
+    ]
+  },
+  "integrity": {
+    "archive_matches_pinned_snapshot": true,
+    "archive_sha256": "1ae20f3260313d501edf23c22c6f1875e87917f5a8e2ff13b40450719322c81b",
+    "checks": {
+      "archive_matches_pinned_snapshot": true,
+      "dataset_metadata_count_matches_database": true,
+      "normalized_ingredient_values_reproducible": true,
+      "original_ingredient_values_preserved": true,
+      "original_recipe_fields_preserved": true,
+      "recipe_ids_unique_across_sources": true,
+      "services_returned_measured_outputs": true,
+      "source_counts_match_inventory": true
+    },
+    "counts": {
+      "empty_or_null_instruction_count": 714,
+      "exact_duplicate_record_excess": 1594,
+      "ingredient_row_count": 1316950,
+      "recipe_count": 125164,
+      "recipes_with_instructions": 124473,
+      "unique_recipe_id_count": 125164
+    },
+    "cross_source_duplicate_id_count": 0,
+    "instruction_step_methods": {
+      "ambiguous_multisentence_blocks": 104775,
+      "ambiguous_numbering": 2013,
+      "ambiguous_single_block": 14448,
+      "missing_or_blank": 714,
+      "newline_delimited_blocks": 1196,
+      "numbered_steps": 778,
+      "single_instruction_block": 1240
+    },
+    "normalized_text_mismatch_count": 0,
+    "original_field_mismatch_count": 0,
+    "original_ingredient_mismatch_count": 0,
+    "source_counts": {
+      "ar": 39802,
+      "epi": 25323,
+      "fn": 60039
+    },
+    "source_ingredient_counts": {
+      "ar": 400846,
+      "epi": 246780,
+      "fn": 669324
+    }
+  },
+  "limitations": [
+    "Timing is a local single-machine measurement, not a latency SLO.",
+    "Gemini and Docker are not exercised by this deterministic runner.",
+    "The full-dataset service timings do not measure concurrent load."
+  ],
+  "logical_cpu_count": 16,
+  "performance": {
+    "ingredient_prevalence_garlic": {
+      "median_seconds": 8.271268200001941,
+      "sample_seconds": [
+        8.271268200001941,
+        8.211392500001239,
+        8.289361999999528
+      ],
+      "valid_ingredient_list_denominator": 124647
+    },
+    "matching_eggs_onions_tomatoes_rice": {
+      "candidate_recipes_analyzed": 72542,
+      "median_seconds": 6.790134999999282,
+      "returned_recipe_count": 5,
+      "sample_seconds": [
+        6.910804499999358,
+        6.790134999999282,
+        6.789899400002469
+      ]
+    },
+    "method": "One warm-up followed by repeated in-process service calls on the same local SQLite database; medians are machine- and cache-dependent.",
+    "repeats_after_warmup": 3,
+    "search_penne": {
+      "median_seconds": 0.01013289999900735,
+      "returned_recipe_count": 10,
+      "sample_seconds": [
+        0.010154100000363542,
+        0.01013289999900735,
+        0.010060900000098627
+      ]
+    },
+    "substitution_discovery_for_cream": {
+      "evidence_status": "unsupported",
+      "median_seconds": 4.737935400000424,
+      "option_count": 10,
+      "recipe_reference": "ar:.iXXbzFopzzV/c0.Frn33J2Ltvxi9DC",
+      "sample_seconds": [
+        4.780354200000147,
+        4.737935400000424,
+        4.732661000001826
+      ]
+    }
+  },
+  "physical_memory_bytes": 16541700096,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "python_version": "3.12.4"
+}

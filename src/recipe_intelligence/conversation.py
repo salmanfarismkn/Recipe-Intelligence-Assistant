@@ -26,6 +26,16 @@ class ConversationState:
     preferences: tuple[str, ...] = ()
     previous_result_ids: tuple[RecipeRef, ...] = ()
     current_task: str | None = None
+    result_limit: int = 20
+    last_statistic_ingredient: str | None = None
+    max_instruction_steps: int | None = None
+    ranking_preferences: tuple[str, ...] = ()
+    search_query: str | None = None
+    search_field: str | None = None
+    details_requested: bool = False
+    dietary_restrictions: tuple[str, ...] = ()
+    hard_exclusions: tuple[str, ...] = ()
+    substitution_ingredient: str | None = None
 
     @property
     def excluded_ingredients(self) -> tuple[str, ...]:
@@ -144,6 +154,16 @@ def _state_payload(state: ConversationState) -> dict[str, object]:
             asdict(recipe) for recipe in state.previous_result_ids
         ],
         "current_task": state.current_task,
+        "result_limit": state.result_limit,
+        "last_statistic_ingredient": state.last_statistic_ingredient,
+        "max_instruction_steps": state.max_instruction_steps,
+        "ranking_preferences": list(state.ranking_preferences),
+        "search_query": state.search_query,
+        "search_field": state.search_field,
+        "details_requested": state.details_requested,
+        "dietary_restrictions": list(state.dietary_restrictions),
+        "hard_exclusions": list(state.hard_exclusions),
+        "substitution_ingredient": state.substitution_ingredient,
     }
 
 
@@ -199,4 +219,14 @@ def load_session_state(
             RecipeRef(**recipe) for recipe in payload["previous_result_ids"]
         ),
         current_task=payload["current_task"],
+        result_limit=payload.get("result_limit", 20),
+        last_statistic_ingredient=payload.get("last_statistic_ingredient"),
+        max_instruction_steps=payload.get("max_instruction_steps"),
+        ranking_preferences=tuple(payload.get("ranking_preferences", ())),
+        search_query=payload.get("search_query"),
+        search_field=payload.get("search_field"),
+        details_requested=payload.get("details_requested", False),
+        dietary_restrictions=tuple(payload.get("dietary_restrictions", ())),
+        hard_exclusions=tuple(payload.get("hard_exclusions", ())),
+        substitution_ingredient=payload.get("substitution_ingredient"),
     )

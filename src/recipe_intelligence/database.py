@@ -21,12 +21,18 @@ from recipe_intelligence.normalization import normalize_ingredient
 from recipe_intelligence.matching import count_instruction_steps, parse_ingredient
 
 
-def connect_database(path: str | Path) -> sqlite3.Connection:
+def connect_database(
+    path: str | Path, *, check_same_thread: bool = True
+) -> sqlite3.Connection:
     """Open and initialize a database connection with foreign keys enabled."""
     if str(path) != ":memory:":
         Path(path).parent.mkdir(parents=True, exist_ok=True)
 
-    connection = sqlite3.connect(str(path))
+    connection = sqlite3.connect(
+        str(path),
+        check_same_thread=check_same_thread,
+        timeout=5.0,
+    )
     connection.row_factory = sqlite3.Row
     try:
         initialize_database(connection)
@@ -163,6 +169,18 @@ def initialize_database(connection: sqlite3.Connection) -> None:
             connection.execute(
                 f"ALTER TABLE recipe_ingredients ADD COLUMN {column} {column_type}"
             )
+    connection.execute(
+        """
+        CREATE INDEX IF NOT EXISTS recipe_ingredients_canonical_idx
+        ON recipe_ingredients (canonical_name)
+        """
+    )
+    connection.execute(
+        """
+        CREATE INDEX IF NOT EXISTS recipe_ingredients_recipe_canonical_idx
+        ON recipe_ingredients (source, recipe_id, canonical_name)
+        """
+    )
 
     migration_complete = connection.execute(
         "SELECT 1 FROM schema_migrations WHERE version = 2"

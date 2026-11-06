@@ -81,6 +81,7 @@ def test_ingredient_parser_handles_amounts_units_and_explicit_aliases() -> None:
     assert range_parsed.quantity_status == "unsupported_range"
     assert range_parsed.canonical_name == "sugar"
     assert parse_ingredient("2 cloves garlic, minced").canonical_name == "garlic"
+    assert parse_ingredient("1 block tofu").canonical_name == "tofu"
     assert parse_ingredient("scallions").canonical_name == "green onion"
     assert parse_ingredient("eggs").canonical_name == "egg"
 
@@ -163,3 +164,74 @@ def test_aliases_are_used_for_candidate_retrieval(
     report = match_recipes(connection, ("green onion",))
 
     assert [recipe.recipe_id for recipe in report.results] == ["scallion-soup"]
+
+
+def test_ranking_preferences_change_order_without_changing_eligibility(
+    connection: sqlite3.Connection, tmp_path: Path
+) -> None:
+    records = {
+        "coverage-heavy": {
+            "title": "Coverage Heavy",
+            "ingredients": [
+                "garlic",
+                "onion",
+                "bread",
+                "butter",
+                "salt",
+                "pepper",
+                "flour",
+                "water",
+            ],
+            "instructions": "1. Prepare ingredients.\n2. Cook.\n3. Serve.",
+        },
+        "fewer-missing": {
+            "title": "Fewer Missing",
+            "ingredients": ["garlic", "mustard"],
+            "instructions": "Mix.",
+        },
+        "excluded": {
+            "title": "Excluded Garlic",
+            "ingredients": ["garlic", "peanut"],
+            "instructions": "Mix.",
+        },
+    }
+    with zipfile.ZipFile(tmp_path / "preference-ranking.zip", "w") as archive:
+        for filename, source in DATASET_FILES.items():
+            archive.writestr(
+                filename,
+                json.dumps(records if source == "ar" else {}),
+            )
+    ingest_dataset_archive(connection, tmp_path / "preference-ranking.zip")
+    available = ("garlic", "onion", "bread", "butter", "salt", "pepper")
+
+    baseline = match_recipes(
+        connection, available, excluded_ingredients=("peanut",)
+    )
+    fewer_missing = match_recipes(
+        connection,
+        available,
+        excluded_ingredients=("peanut",),
+        ranking_preferences=("fewer_missing",),
+    )
+    fewer_additional = match_recipes(
+        connection,
+        available,
+        excluded_ingredients=("peanut",),
+        ranking_preferences=("fewer_additional",),
+    )
+    fewer_steps = match_recipes(
+        connection,
+        available,
+        excluded_ingredients=("peanut",),
+        ranking_preferences=("fewer_steps",),
+    )
+
+    baseline_ids = {item.recipe_id for item in baseline.results}
+    assert baseline_ids == {item.recipe_id for item in fewer_missing.results}
+    assert baseline_ids == {item.recipe_id for item in fewer_additional.results}
+    assert baseline_ids == {item.recipe_id for item in fewer_steps.results}
+    assert "excluded" not in baseline_ids
+    assert baseline.results[0].recipe_id == "coverage-heavy"
+    assert fewer_missing.results[0].recipe_id == "fewer-missing"
+    assert fewer_additional.results[0].recipe_id == "coverage-heavy"
+    assert fewer_steps.results[0].recipe_id == "fewer-missing"

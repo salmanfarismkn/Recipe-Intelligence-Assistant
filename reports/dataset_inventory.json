@@ -1,0 +1,74 @@
+{
+  "archive_matches_pinned_snapshot": true,
+  "archive_sha256": "1ae20f3260313d501edf23c22c6f1875e87917f5a8e2ff13b40450719322c81b",
+  "duplicate_recipe_ids_across_sources": [],
+  "sources": [
+    {
+      "blank_instruction_count": 0,
+      "blank_title_count": 0,
+      "empty_ingredient_list_count": 0,
+      "empty_record_count": 280,
+      "expected_record_count": 39802,
+      "filename": "recipes_raw_nosource_ar.json",
+      "invalid_ingredient_list_count": 0,
+      "invalid_record_count": 0,
+      "missing_field_counts": {
+        "ingredients": 280,
+        "instructions": 280,
+        "picture_link": 280,
+        "title": 280
+      },
+      "non_string_ingredient_count": 0,
+      "null_field_counts": {},
+      "record_count": 39802,
+      "record_count_matches_snapshot": true,
+      "source": "ar"
+    },
+    {
+      "blank_instruction_count": 23,
+      "blank_title_count": 0,
+      "empty_ingredient_list_count": 47,
+      "empty_record_count": 0,
+      "expected_record_count": 25323,
+      "filename": "recipes_raw_nosource_epi.json",
+      "invalid_ingredient_list_count": 0,
+      "invalid_record_count": 0,
+      "missing_field_counts": {},
+      "non_string_ingredient_count": 0,
+      "null_field_counts": {
+        "picture_link": 13204
+      },
+      "record_count": 25323,
+      "record_count_matches_snapshot": true,
+      "source": "epi"
+    },
+    {
+      "blank_instruction_count": 0,
+      "blank_title_count": 0,
+      "empty_ingredient_list_count": 1629,
+      "empty_record_count": 237,
+      "expected_record_count": 60039,
+      "filename": "recipes_raw_nosource_fn.json",
+      "invalid_ingredient_list_count": 0,
+      "invalid_record_count": 0,
+      "missing_field_counts": {
+        "ingredients": 237,
+        "instructions": 237,
+        "picture_link": 237,
+        "title": 237
+      },
+      "non_string_ingredient_count": 0,
+      "null_field_counts": {
+        "instructions": 174,
+        "picture_link": 28850,
+        "title": 52
+      },
+      "record_count": 60039,
+      "record_count_matches_snapshot": true,
+      "source": "fn"
+    }
+  ],
+  "total_record_count": 125164,
+  "total_record_count_matches_snapshot": true,
+  "unique_recipe_id_count": 125164
+}
