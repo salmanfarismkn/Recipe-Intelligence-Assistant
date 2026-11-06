@@ -1,123 +1,308 @@
 {
   "all_integrity_checks_passed": true,
-  "database_path": "recipe-intelligence-stage9-audit.sqlite3",
-  "database_size_bytes": 1261944832,
-  "evaluation_version": 1,
-  "release_verification": {
-    "browser_automation": {
-      "status": "not_performed",
-      "note": "Fresh-process HTTP/static-asset checks passed; no browser automation was run."
-    },
-    "clean_install_on_separate_machine": {
-      "status": "not_verified"
-    },
-    "docker": {
-      "status": "not_available",
-      "note": "The repository has no Dockerfile or Compose configuration."
-    },
-    "full_dataset_api": {
-      "search": {
-        "http_status": 200,
-        "result_count": 5
-      },
-      "analytics_garlic_prevalence": {
-        "http_status": 200,
-        "numerator": 37344,
-        "denominator": 124647
-      },
-      "matching": {
-        "http_status": 200,
-        "candidate_recipes_analyzed": 72542,
-        "result_count": 5,
-        "quantity_sufficiency_verified": false
-      },
-      "substitution": {
-        "http_status": 200,
-        "status": "unsupported",
-        "option_count": 10
-      }
-    },
-    "full_dataset_conversation": {
-      "turn_count": 5,
-      "statuses": [
-        "complete",
-        "complete",
-        "complete",
-        "complete",
-        "complete"
+  "assessment_reasons": [
+    "Deterministic dataset and service checks passed, including a directly supported real-data substitution and a weak-evidence refusal.",
+    "Live Gemini verification was not performed because credentials and model configuration were unavailable.",
+    "Ingredient quantity equivalence and substitution trade-offs remain unverified by recipe text."
+  ],
+  "conversations": {
+    "aggregate_statistics": {
+      "analyzed_recipe_count": 125164,
+      "calculation_method": "Count each recipe once when all normalized query tokens occur in its ingredient lines, then divide by recipes with valid ingredient lists. No aliases or stemming are applied.",
+      "denominator": 124647,
+      "excluded_recipe_count": 517,
+      "numerator": 16143,
+      "statistic": "ingredient_prevalence",
+      "turns": [
+        {
+          "response": "Statistic ingredient_prevalence: value 0.12950973549303232 fraction of recipes; percentage of analyzed recipes 12.950974%; numerator 16143; denominator 124647; analyzed recipes 125164; excluded recipes 517; filters {'sources': (), 'title_query': None, 'include_ingredients': (), 'exclude_ingredients': ()}; method: Count each recipe once when all normalized query tokens occur in its ingredient lines, then divide by recipes with valid ingredient lists. No aliases or stemming are applied.",
+          "status": "complete",
+          "user": "How many recipes contain both garlic and onion?"
+        }
       ],
-      "hard_exclusions_after_followups": [
+      "value": 0.12950973549303232
+    },
+    "all_conversation_turns_complete": true,
+    "evidence_based_substitution_refusal": {
+      "ingredient_to_replace": "cream",
+      "original_recipe": {
+        "reference": "ar:.iXXbzFopzzV/c0.Frn33J2Ltvxi9DC",
+        "title": "Cherry Bell Cookies"
+      },
+      "proposal_status": "unsupported",
+      "refused_option": {
+        "conflicting_evidence": false,
+        "cooccurrence_recipe_ids": [
+          "ar:7a2AqzN6SrVSV8GadNueouOU8/zHBEW",
+          "ar:ZIKbi1/5fKhWyVwXDU5YFYLiiKydVPa",
+          "ar:lsX.3uaF/FyQ8ilqh6alz9F18swTr9y",
+          "epi:3Jfe.BtNIVYUnC44fSjcbpSrQgwnqh6",
+          "epi:6COfL.avu4SF6GEhIS86qRvSCoZjl8y",
+          "epi:PxTALUUHBU/AuMUjZJ1LqoDlKRsSwSa",
+          "epi:QgMrg8rHpufJv.CNKWSHNtNCyA4FqQW",
+          "epi:TkaT2hHHw7GZFupNm0hhfF4kq7A8Enq",
+          "epi:isc.JydjwQw0uf0zOQqOz.dwWWsI/ca",
+          "fn://gmQnmNtpUXfzYPVkhqwKU25rkJ5jC",
+          "fn:/3zO2UxHvq62GnCO6cdvp5S13nJnq/S",
+          "fn:0Eyf4/EY1oe7U8sNg1obBEy0W7dLFqm",
+          "fn:2JVI1lEt7Us3Y3BiGY3rWk5pysQJvBW",
+          "fn:2Waly9aVsR8DPZwD3ilHKR7bFOFGgi6",
+          "fn:2deZ4cTNznj7HKhlprNsEipNemlmfHG",
+          "fn:2iNlJHQUGvUShqKjpDQoLOhSVcTk6Ce",
+          "fn:2o1ekjRYYenBUYW/kqW40sLa/78HIMq",
+          "fn:3gVsgsDXctbvYV0P4mpg6A1rJOKITH.",
+          "fn:3lMN2b7U92gOVnK3GLokO8zyxd5fnya",
+          "fn:4ygYoGfA0ZgxbbJXAO/D2MrrO0DzAk."
+        ],
+        "evidence_classification": "weak",
+        "expected_trade_offs": [
+          "Taste, texture, and preparation trade-offs are not established by the retrieved recipe records."
+        ],
+        "remaining_uncertainty": [
+          "Ingredient quantities are not compared or transferred.",
+          "Similar recipe composition does not prove that the alternative is interchangeable.",
+          "No medical or allergy-safety conclusion is made."
+        ],
+        "replacement": "egg yolks",
+        "revised_ingredient_list": null,
+        "sufficiently_supported": false,
+        "supporting_recipe_ids": [
+          "ar:RkvV7g9gri1dG8ERR5Rs.K6jyUfFZXu",
+          "ar:.8P5LGtW3lWesQw/McPzUzbfO0r0ExC",
+          "ar:0FSxjNGWmm1k08dWfX.YA1a9euDY1.q",
+          "ar:4eeWQf44qEbXrzSxEjxgxo9Q0malR2i",
+          "ar:G7abkf5YQhjoZi.QKzNnYakxGx3p/36",
+          "ar:IJ44bqBYqq4lS.F4i.ywxqu1xn5HsmG",
+          "ar:a5DwRfrbbH79/aN2k9Lt7DC0/QEcuQ6",
+          "ar:g2.Hhn4I1j25v2UM2F4mpJGpZhJ8s6O",
+          "ar:pYlHf5WgF62n/8r7ZNUBLMf.FSGTjpq",
+          "ar:x7q8b0JqGnpn04M50l2Ztvj5X6Rai9C",
+          "epi:OIU28hgQBwUf7CgKwi0YHlYqMQA3ljK",
+          "fn:/m2uZI4jEVyqyB4yky4VAwOAK0a7/lO",
+          "fn:2OHm7JibOTnZwfY9zrK8MRh6qcIS3yu",
+          "fn:AsxqGSe1t.buGQFD5PsFw6c5XaiAc7m",
+          "fn:IQGyEySL4VBdGcug.x1OatXj/pueZka",
+          "fn:P15320dRmXmE1uQ4zl9/KiwYwyfxiSe",
+          "fn:RwPLynFWF872CWw6vfkdsaf7I5Rhbmi",
+          "fn:SzPugeBhz.RdHmCA0ebOse7ukqpHjpO",
+          "fn:UoUir8waiat83R39W7yPaq6E686NyIa",
+          "fn:jmTravvZyRlrLLCVQRNG7DetGjczIaC"
+        ]
+      },
+      "turns": [
+        {
+          "response": "Search for 'Cherry Bell Cookies' returned 2 local recipe record(s).\nRecipe ar:.iXXbzFopzzV/c0.Frn33J2Ltvxi9DC: Cherry Bell Cookies.\nRecipe epi:Vl7VBARcQL2gBQ0iy7VDfm4abkTqXMK: Mary's Bell Cookies .",
+          "status": "complete",
+          "user": "Find Cherry Bell Cookies"
+        },
+        {
+          "response": "Selected ar:.iXXbzFopzzV/c0.Frn33J2Ltvxi9DC: Cherry Bell Cookies.",
+          "status": "complete",
+          "user": "What about the first result?"
+        },
+        {
+          "response": "Substitution evidence for cream in ar:.iXXbzFopzzV/c0.Frn33J2Ltvxi9DC.",
+          "status": "complete",
+          "user": "Replace cream in that recipe."
+        }
+      ]
+    },
+    "gemini_live_verification": {
+      "configuration_present": false,
+      "reason": "A live Gemini request was not run because LLM_ENABLED, GEMINI_API_KEY, and GEMINI_MODEL were not all configured.",
+      "status": "NOT_VERIFIED"
+    },
+    "ingredient_matching_and_followup_exclusion": {
+      "candidate_recipes_analyzed": 72542,
+      "hard_constraint_violations": [],
+      "hard_exclusions": [
         "peanuts",
         "eggs"
       ],
       "maximum_instruction_steps": 6,
-      "ranking_preferences": [
-        "fewer_additional"
+      "quantity_sufficiency_verified": false,
+      "ranking_preferences": [],
+      "result_references": [
+        "fn:tnAQ.HtmHe2Gol3gsPMulfkEl7Q1IYG",
+        "fn:SiEQPoQIPVr67EX/Rj3QQC/TpF.XnhG",
+        "fn:bLPXU0T8L.h.QFJVPcj/87s2WU6afXe",
+        "fn:DxsP.opjapGRa4zq4XMrI5M2Zz6EGue",
+        "fn:uJQ/BFKwfjgq1TbJyTPgBuSt3pt4sV2"
       ],
-      "selected_recipe_reference": "fn:88JVPaInKt8p04BeYdzZjhGT6WTDPdW",
-      "original_instructions_verified_against_database": true,
-      "state_persistence_verified": true
-    },
-    "fresh_server": {
-      "status": "passed",
-      "ready_milliseconds": 1133,
-      "health_status": "ok",
-      "root_http_status": 200,
-      "javascript_asset_http_status": 200,
-      "search_http_status": 200
-    },
-    "gemini_live_smoke": {
-      "status": "not_performed",
-      "reason": "Gemini was disabled and credentials/model were not configured."
-    },
-    "grounding_evaluation": {
-      "status": "passed",
-      "archive_matches_pinned_snapshot": true,
-      "total_record_count": 125164,
-      "checks": {
-        "interpretation_entity_validation": true,
-        "search_references_preserved": true,
-        "fabricated_reference_rejected": true,
-        "hard_exclusion_preserved": true
-      },
-      "matching_candidates_analyzed": 37344
-    },
-    "scoped_security_review": {
-      "status": "manual_review_only",
-      "controls_observed": [
-        "Pydantic schema limits and a 64 KiB request-body cap",
-        "Parameterized SQL filters and recipe identifiers",
-        "Dataset/model strings rendered by the browser as text",
-        "No Gemini credential in frontend assets or API error payloads",
-        "No cross-origin middleware enabled"
-      ],
-      "deployment_limitations": [
-        "No authentication is provided; this is a local single-user application.",
-        "No penetration test or hostile-network exposure test was performed."
+      "turns": [
+        {
+          "response": "Matching analyzed 72542 candidate recipe(s); 5 result(s) are shown, with maximum steps 6. Quantity sufficiency verified: False.\nRank 1: fn:tnAQ.HtmHe2Gol3gsPMulfkEl7Q1IYG, QA; matched 1 cup rice; missing none; instruction steps 1 (single_instruction_block).\nRank 2: fn:SiEQPoQIPVr67EX/Rj3QQC/TpF.XnhG, QATest2; matched 1 cup rice; missing 2 cup milk; instruction steps 1 (single_instruction_block).\nRank 3: fn:cM3Ru3UzMbFdnneiFSh22Dxga6N7afq, Salami and Eggs; matched 2 eggs, beaten; missing 2 slices salami; instruction steps 1 (single_instruction_block).\nRank 4: fn:YWfYwwW4aVmK4BYj62ST94xhyjT9DG., Spicy Egg Scramble; matched 1 small onion, 4 large eggs; missing 1 Tbsp. Mrs. Dash\u00ae Extra Spicy Seasoning Blend, vegetable oil spray, 1/2 medium red pepper; instruction steps 6 (numbered_steps).\nRank 5: fn:TuZzKlaTJ6fYogG0czqutl0CauvgjiS, Best Meatloaf; matched 2 eggs, 1 small onion, chopped; missing 2 pounds ground beef, 2/3 cup plus 2 tablespoons Kikkoman Katsu Sauce, divided, 1 green onion, roughly chopped, 2 cups Kikkoman Panko Bread Crumbs; instruction steps 4 (numbered_steps).\nRejected for excluded ingredients: 1575; unknown ingredients: 2193; step limit: 21; unknown steps: 19563. Ingredient quantities are parsed when recognizable but are not compared; having an ingredient does not verify sufficient quantity.",
+          "status": "complete",
+          "user": "I have eggs, onions, tomatoes and rice. Suggest five recipes without peanuts and no more than six steps."
+        },
+        {
+          "response": "Updated matching to exclude eggs.",
+          "status": "complete",
+          "user": "Exclude eggs too."
+        }
       ]
     },
-    "test_suite": {
-      "command": "python -m pytest -q",
-      "passed": 72,
-      "failed": 0,
-      "warnings": [
-        "Starlette/httpx TestClient deprecation warning",
-        "AnyIO BlockingPortal deprecation warning"
+    "instruction_step_ranking": {
+      "candidate_recipes_analyzed": 19391,
+      "ranking_preferences": [
+        "fewer_steps"
+      ],
+      "results": [
+        {
+          "instruction_step_count": 1,
+          "instruction_step_method": "single_instruction_block",
+          "reference": "ar:BqfGsVgk7WHPebuzDH3IIRDAo0Vy8Hy",
+          "title": "Refreshing Mango Chutney"
+        },
+        {
+          "instruction_step_count": 1,
+          "instruction_step_method": "single_instruction_block",
+          "reference": "fn:Ppx1bwn1nD7NBLgtVkk4T0QXMyFiAk2",
+          "title": "Lomi Tomato Relish"
+        },
+        {
+          "instruction_step_count": 1,
+          "instruction_step_method": "single_instruction_block",
+          "reference": "fn:3P3/q6.aisfh2sqiGQ3TvV6ygmcC2Aa",
+          "title": "Avocado Salads"
+        },
+        {
+          "instruction_step_count": 1,
+          "instruction_step_method": "single_instruction_block",
+          "reference": "ar:oCJaX1HkVK3st8Mjph4YfJEY3TMWA1e",
+          "title": "Vegetable and Fruit Juice"
+        },
+        {
+          "instruction_step_count": 1,
+          "instruction_step_method": "single_instruction_block",
+          "reference": "fn:KmlIOHy3fwzNnRBANwdiLqkNcPuCY1G",
+          "title": "Pumpkin Soup"
+        }
+      ],
+      "turns": [
+        {
+          "response": "Matching analyzed 19391 candidate recipe(s); 5 result(s) are shown, with maximum steps None. Quantity sufficiency verified: False.\nRank 1: ar:BqfGsVgk7WHPebuzDH3IIRDAo0Vy8Hy, Refreshing Mango Chutney; matched 1 medium tomato, chopped ADVERTISEMENT; missing 1 red onion, chopped ADVERTISEMENT, 1 mango - peeled, seeded, and chopped ADVERTISEMENT, 2 sprigs fresh cilantro, chopped, or more to taste ADVERTISEMENT, ADVERTISEMENT; instruction steps 1 (single_instruction_block).\nRank 2: fn:Ppx1bwn1nD7NBLgtVkk4T0QXMyFiAk2, Lomi Tomato Relish; matched 3 pounds tomato, diced small; missing 2 cups yellow onion, diced small, 1 1/2 cups green onion, sliced, 3 tablespoons Hawaiian salt, 1/4 cup Hawaiian chili pepper water; instruction steps 1 (single_instruction_block).\nRank 3: fn:3P3/q6.aisfh2sqiGQ3TvV6ygmcC2Aa, Avocado Salads; matched Tomatoes; missing Ripe haas avocados, Mango, Papaya, Arugula, Chervil Leaves, Nicoise olives; instruction steps 1 (single_instruction_block).\nRank 4: ar:oCJaX1HkVK3st8Mjph4YfJEY3TMWA1e, Vegetable and Fruit Juice; matched 1 large tomato ADVERTISEMENT; missing 3 large carrots ADVERTISEMENT, 8 large strawberries ADVERTISEMENT, 1 lime, sliced ADVERTISEMENT, 1 (1 inch) piece fresh ginger ADVERTISEMENT, 1 apple ADVERTISEMENT, 1 large red bell pepper, stemmed and seeded ADVERTISEMENT, ADVERTISEMENT; instruction steps 1 (single_instruction_block).\nRank 5: fn:KmlIOHy3fwzNnRBANwdiLqkNcPuCY1G, Pumpkin Soup; matched 1 can chopped tomato; missing 1 can pure pumpkin, 1/2 sauteed onion, Garlic powder, Pinch cinnamon, 1 cup heavy cream, Red pepper flakes, Salt and pepper; instruction steps 1 (single_instruction_block).\nRejected for excluded ingredients: 0; unknown ingredients: 2193; step limit: 0; unknown steps: 0. Ingredient quantities are parsed when recognizable but are not compared; having an ingredient does not verify sufficient quantity.",
+          "status": "complete",
+          "user": "Among recipes containing tomatoes, show five with the fewest steps."
+        }
+      ]
+    },
+    "no_match_case": {
+      "result_count": 0,
+      "turns": [
+        {
+          "response": "Search for 'recipe titled this-is-not-a-real-dish-zzq' returned 0 local recipe record(s).",
+          "status": "complete",
+          "user": "Find a recipe titled this-is-not-a-real-dish-zzq."
+        }
+      ]
+    },
+    "one_shot_comparison": {
+      "executed_deterministic_comparison": {
+        "conversation_denominator": 124647,
+        "conversation_numerator": 37344,
+        "conversation_status": "complete",
+        "direct_analytics_denominator": 124647,
+        "direct_analytics_numerator": 37344,
+        "prompt": "How common is garlic?",
+        "same_computed_result": true
+      },
+      "llm_reason": "No valid Gemini configuration was present; no mock was used as a live comparison.",
+      "llm_status": "NOT_VERIFIED"
+    },
+    "positive_substitution_verification": {
+      "conflicting_evidence": false,
+      "evidence_classification": "direct",
+      "expected_trade_offs": [
+        "Taste, texture, and preparation trade-offs are not established by the retrieved recipe records."
+      ],
+      "instruction_adjustments": [],
+      "instruction_note": "No rewrite was returned: the original instructions refer generically to 'all the ingredients' and do not name the replaced ingredient.",
+      "original_ingredient": "4 cups garbanzo beans, drained",
+      "original_recipe": {
+        "reference": "fn:no81mIW/BbCbewZyPT8AaKCgsrDitEO",
+        "title": "Hummus"
+      },
+      "proposal_status": "supported",
+      "remaining_uncertainty": [
+        "Ingredient quantities are not compared or transferred.",
+        "Similar recipe composition does not prove that the alternative is interchangeable.",
+        "No medical or allergy-safety conclusion is made."
+      ],
+      "replacement_ingredient": "black beans",
+      "revised_ingredient_list": [
+        "black beans",
+        "1 cup tahini",
+        "1 cup lemon juice",
+        "3/4 cup minced garlic",
+        "1/2 cup canola oil",
+        "1 teaspoon salt",
+        "1 teaspoons black pepper"
+      ],
+      "revised_instructions": null,
+      "search_method": "Explicitly tested a pinned Hummus recipe against the dataset's Black Bean Hummus counterpart through the existing substitution service; no evidence thresholds were changed.",
+      "sufficiently_supported": true,
+      "supporting_recipe_evidence": [
+        {
+          "ingredient_overlap": 1.0,
+          "instruction_excerpt": [
+            "Place all ingredients in a mixing bowl. Mix with a wire whisk until smooth. Place in 2 plastic containers and refrigerate."
+          ],
+          "reference": "fn:MiVM/xJ8d68Wd3zdYdZFjVEZ.cD8tgS",
+          "replacement_ingredient_lines": [
+            "4 cups black beans, drained"
+          ],
+          "shared_ingredients": [
+            "black pepper",
+            "canola oil",
+            "garlic",
+            "lemon juice",
+            "salt",
+            "tahini"
+          ],
+          "shared_preparation_methods": [
+            "mix"
+          ],
+          "shared_title_terms": [
+            "hummus"
+          ],
+          "title": "Black Bean Hummus"
+        }
+      ],
+      "supporting_recipe_ids": [
+        "fn:MiVM/xJ8d68Wd3zdYdZFjVEZ.cD8tgS"
+      ]
+    },
+    "search_and_contextual_restriction": {
+      "applied_exclusions": [
+        "mushrooms"
+      ],
+      "first_five_recipe_ids": [
+        "fn:RvZR9.CbNY3mVGdNFzT6QDJ2oq.TZlu",
+        "ar:./Y2IEmiANmKQmZj7PqgNeqisN9Uz/i",
+        "fn:qk0DDmpD6DGMVN9Sar28UDrB0HVExBW",
+        "fn:nebNP711lpU8UubKwGAeOXT.e6mj6kG",
+        "fn:IEG2MehwhqKH.s9fAO9AdvgcK1GiSdW"
+      ],
+      "result_count": 20,
+      "turns": [
+        {
+          "response": "Search for 'garlic bread' returned 20 local recipe record(s).\nRecipe fn:RvZR9.CbNY3mVGdNFzT6QDJ2oq.TZlu: Garlic Bread.\nRecipe ar:./Y2IEmiANmKQmZj7PqgNeqisN9Uz/i: Bread Machine Garlic Bread.\nRecipe fn:qk0DDmpD6DGMVN9Sar28UDrB0HVExBW: Gooey Mozzarella-Garlic Bread.\nRecipe fn:nebNP711lpU8UubKwGAeOXT.e6mj6kG: Garlic Bread.\nRecipe fn:IEG2MehwhqKH.s9fAO9AdvgcK1GiSdW: Garlic Bread.\nRecipe ar:nPKOHhnKohjivRnqVw6yru8XadooScK: Mrs. Prophet's Roasted Garlic French Bread.\nRecipe fn:XhwDNHbH/2p3siWyvf1C3n7eXYArxsu: Lilys Garlic Bread.\nRecipe ar:iBBypcDz9OdApgJnvsXdksbJJX07pii: Crusty Garlic Bread.\nRecipe fn:s91xBSCVKltK3RFST08c.aIih296ASq: Tuscan Fettunta and Le Bruschette: Tuscan Toasted Bread and Bruschetta.\nRecipe fn:ooV07higflcrVoUF86fId9hX.SpTZVK: Grilled Garlic Bread.\nRecipe fn:bE6GoVO1SMREzXAB4hHtzOnQK4JQLvG: Garlic Bread.\nRecipe fn:n0j47V267z86mKvCFesRg1mYvZRcj9G: Toasted Garlic Cheese Bread.\nRecipe epi:oFLpzMl.fBQB4hknaePIpDe0UPFShhK: Grilled Herb Garlic Bread .\nRecipe fn:ym6C37RG.SJ.FrxjadcgLG5ND5gs3Y2: Grilled Garlic Bread.\nRecipe ar:F1KlLmV.tgjJ/1ictQFopHnv7Ax2CRe: Garlic Pita Bread Bites.\nRecipe fn:satcleb6gvaDoAmpXGYCAaNKQc8EYDS: Garlic Cheese Bread Sticks.\nRecipe fn:JEbzUiZPH66nP3XjNCpHwgttSaZf00a: Cheesy Garlic Bread.\nRecipe fn:24gEjxUNcK8eOwnLA2HSpzVApKIkq1S: Garlic Bread.\nRecipe ar:LL5BIYQHdnkUgqMUBwZyKR0x7QrnXX.: Roasted Garlic Bread.\nRecipe ar:hOVUaiBd96XX7OJVJZmh8ZZFMlZ4QI2: Parmesan Garlic Bread.",
+          "status": "complete",
+          "user": "Find garlic bread"
+        },
+        {
+          "response": "Updated the search to exclude mushrooms.",
+          "status": "complete",
+          "user": "Exclude mushrooms too."
+        }
       ]
     }
   },
-  "submission_readiness": {
-    "classification": "conditionally_ready_for_local_deterministic_review",
-    "basis": "Pinned dataset integrity, deterministic tests, full-dataset APIs, and a multi-turn hard-constraint conversation passed.",
-    "unverified_or_unavailable": [
-      "Live Gemini connectivity and configured model access",
-      "Browser automation/visual inspection",
-      "Clean install on a separate machine",
-      "Docker/container deployment",
-      "Production multi-worker concurrency",
-      "Penetration testing and network-exposure validation"
-    ]
-  },
+  "database_path": "recipes.sqlite3",
+  "database_size_bytes": 1261932544,
+  "evaluation_version": 1,
+  "final_assessment": "CONDITIONAL PASS",
   "integrity": {
     "archive_matches_pinned_snapshot": true,
     "archive_sha256": "1ae20f3260313d501edf23c22c6f1875e87917f5a8e2ff13b40450719322c81b",
@@ -165,50 +350,43 @@
   },
   "limitations": [
     "Timing is a local single-machine measurement, not a latency SLO.",
-    "Gemini and Docker are not exercised by this deterministic runner.",
+    "Gemini was not exercised because no valid configuration was present.",
+    "Docker is not configured or exercised.",
     "The full-dataset service timings do not measure concurrent load."
   ],
   "logical_cpu_count": 16,
   "performance": {
     "ingredient_prevalence_garlic": {
-      "median_seconds": 8.271268200001941,
+      "median_seconds": 8.503505399999995,
       "sample_seconds": [
-        8.271268200001941,
-        8.211392500001239,
-        8.289361999999528
+        8.503505399999995
       ],
       "valid_ingredient_list_denominator": 124647
     },
     "matching_eggs_onions_tomatoes_rice": {
       "candidate_recipes_analyzed": 72542,
-      "median_seconds": 6.790134999999282,
+      "median_seconds": 6.76137220000237,
       "returned_recipe_count": 5,
       "sample_seconds": [
-        6.910804499999358,
-        6.790134999999282,
-        6.789899400002469
+        6.76137220000237
       ]
     },
     "method": "One warm-up followed by repeated in-process service calls on the same local SQLite database; medians are machine- and cache-dependent.",
-    "repeats_after_warmup": 3,
+    "repeats_after_warmup": 1,
     "search_penne": {
-      "median_seconds": 0.01013289999900735,
+      "median_seconds": 0.009678600003098836,
       "returned_recipe_count": 10,
       "sample_seconds": [
-        0.010154100000363542,
-        0.01013289999900735,
-        0.010060900000098627
+        0.009678600003098836
       ]
     },
     "substitution_discovery_for_cream": {
       "evidence_status": "unsupported",
-      "median_seconds": 4.737935400000424,
+      "median_seconds": 4.740063799999916,
       "option_count": 10,
       "recipe_reference": "ar:.iXXbzFopzzV/c0.Frn33J2Ltvxi9DC",
       "sample_seconds": [
-        4.780354200000147,
-        4.737935400000424,
-        4.732661000001826
+        4.740063799999916
       ]
     }
   },

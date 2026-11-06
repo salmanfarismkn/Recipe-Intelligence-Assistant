@@ -14,6 +14,11 @@ them through FastAPI and a lightweight browser chat.
 The deterministic application runs without Gemini credentials. There is no
 Docker configuration in this repository.
 
+The pinned ZIP is about 53.4 MB; a full ingested SQLite database was about
+1.26 GB in the verified run. Allow at least 2 GiB of free space where the
+database is written for the database and SQLite ingestion/indexing headroom.
+This is a practical recommendation, not a platform-independent minimum.
+
 ## Run locally
 
 From the repository root in PowerShell:

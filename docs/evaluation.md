@@ -23,15 +23,16 @@ python scripts\download_dataset.py
 python scripts\ingest_dataset.py data\raw\recipes_raw.zip
 python -m pytest -q
 python scripts\evaluate_llm_grounding.py data\raw\recipes_raw.zip
-python scripts\run_release_evaluation.py --database data\processed\recipes.sqlite3 --repeats 3 --output reports\evaluation_report.json
+python scripts\run_release_evaluation.py --database data\processed\recipes.sqlite3 --repeats 1 --output reports\evaluation_report.json
 ```
 
 The first evaluator ingests the archive into a temporary in-memory database
 and checks typed-entity validation, verified result references, fabricated
 fact-ID rejection, and hard-exclusion preservation. The release runner opens
 the ingested SQLite database read-only, checks source counts and stored-value
-integrity, then warms each service and records three local timing samples.
-Performance medians are hardware/cache dependent, not service-level objectives.
+integrity, then warms each service and records local timing samples (one sample in the
+final report; use more repeats for less noisy timing comparisons). Performance
+medians are hardware/cache dependent, not service-level objectives.
 
 The generated [release report](../reports/evaluation_report.json) records the
 exact host/runtime, database size, integrity checks, candidate counts, and
@@ -40,8 +41,8 @@ local data, not checked-in fixtures.
 
 ## Verified behavior
 
-- `python -m pytest -q`: **72 passed** in 4.30 seconds; two Starlette/httpx
-  deprecation warnings.
+- `python -m pytest -q`: **72 passed**; two Starlette/httpx deprecation
+  warnings.
 - Full archive grounding evaluator: all four checks passed on all 125,164
   records. It verified three actual search references, analyzed 37,344
   matching candidates, preserved a peanut exclusion, and rejected an invented
@@ -51,8 +52,20 @@ local data, not checked-in fixtures.
 - Full-dataset HTTP API checks returned `200` for search, garlic-prevalence
   analytics, matching, and substitution. Prevalence was 37,344 / 124,647 valid
   ingredient-list recipes; matching examined 72,542 candidates and returned
-  five; the substitution service returned ten unsupported evidence options
-  rather than asserting an unevidenced adaptation.
+  five; cream substitution discovery for Cherry Bell Cookies returned ten
+  unsupported evidence options rather than asserting an unevidenced adaptation.
+- Positive substitution verification: `fn:no81mIW/BbCbewZyPT8AaKCgsrDitEO`
+  (`Hummus`) replaced garbanzo beans with black beans using direct evidence
+  from `fn:MiVM/xJ8d68Wd3zdYdZFjVEZ.cD8tgS` (`Black Bean Hummus`). The service
+  produced a revised ingredient list. It did not rewrite instructions, which
+  refer generically to all ingredients; quantity equivalence and taste/texture
+  trade-offs remain unverified. The weak-evidence Cherry Bell Cookies refusal
+  is retained as a separate evaluation case.
+- The generated report records complete search/refinement, statistics,
+  instruction-step ranking, matching/exclusion, substitution-refusal,
+  no-match, and one-shot deterministic-comparison scenarios. The one-shot
+  Gemini comparison remains **NOT VERIFIED**; the deterministic conversation
+  result matched the analytics endpoint.
 - Full-dataset conversation exercised: request matching with eggs, onions,
   tomatoes, rice, peanut exclusion and a six-step ceiling; add the
   fewer-additional preference; exclude eggs; show the second recipe; retrieve
@@ -69,15 +82,15 @@ local data, not checked-in fixtures.
 
 The recorded host was Windows 11, Python 3.12.4, AMD Ryzen 7 5800HS (8 cores,
 16 logical CPUs), 16,541,700,096 bytes of physical memory. The report's
-benchmarks use one local SQLite file, one warm-up, and three repeated
-in-process service calls:
+benchmarks use one local SQLite file, one warm-up, and one measured in-process
+service call:
 
 | Operation | Median | Sample output |
 |---|---:|---|
-| FTS search for `penne` | 0.0101 s | 10 records |
-| Garlic prevalence | 8.2713 s | 124,647 valid-list denominator |
-| Matching eggs/onions/tomatoes/rice | 6.7901 s | 72,542 candidates, 5 results |
-| Cream substitution discovery | 4.7379 s | 10 options; `unsupported` |
+| FTS search for `penne` | 0.0097 s | 10 records |
+| Garlic prevalence | 8.5035 s | 124,647 valid-list denominator |
+| Matching eggs/onions/tomatoes/rice | 6.7614 s | 72,542 candidates, 5 results |
+| Cream substitution discovery | 4.7401 s | 10 options; `unsupported` |
 
 These are machine/cache-dependent observations, not latency SLOs. They do not
 measure concurrent traffic or an HTTP server under load.
@@ -102,13 +115,13 @@ measure concurrent traffic or an HTTP server under load.
 
 ## Readiness assessment
 
-**Conditionally ready for local deterministic review; not verified as a
-production or Gemini-enabled release.** Dataset integrity, deterministic
-services, API routes, and the required multi-turn restrictions were exercised
-against the full pinned dataset. Remaining verification gaps are live Gemini
-access/model/structured output, browser automation, clean install on a separate
-machine, and container deployment. Deployment is intentionally local and
-single-process until those environments are supplied and evaluated.
+**CONDITIONAL PASS.** Dataset integrity, deterministic services, API routes,
+multi-turn restrictions, a direct-evidence substitution, and a weak-evidence
+refusal were exercised against the pinned dataset. Live Gemini
+access/model/structured output remains **NOT VERIFIED** because credentials
+were not configured. Browser automation, clean install on a separate machine,
+and container deployment are also unverified. Deployment is intentionally
+local and single-process until those environments are supplied and evaluated.
 
 ## Known limitations
 
